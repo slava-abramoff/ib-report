@@ -17,7 +17,10 @@ build/
 src/db/database.sqlite
 
 # Drizzle migrations SQL (если не хотите хранить SQL-файлы)
-# src/db/migrations/
+ src/db/migrations/
+
+# pdf
+*.pdf
 
 # Logs
 *.log
