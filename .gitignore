@@ -1,0 +1,36 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript output
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# SQLite database
+src/db/database.sqlite
+
+# Drizzle migrations SQL (если не хотите хранить SQL-файлы)
+# src/db/migrations/
+
+# Logs
+*.log
+
+#PDF
+*.pdf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional editor settings
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
