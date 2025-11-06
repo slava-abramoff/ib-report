@@ -1,11 +1,26 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "../db/db";
 import { NewEvent, events } from "../models/event.model";
 
 export const eventService = {
-  getAll: () => db.select().from(events).all(),
+  async getAll(skip = 0, limit = 10) {
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(events);
 
-  create: (data: NewEvent) => db.insert(events).values(data).run(),
+    const data = await db.select().from(events).limit(limit).offset(skip);
+
+    return {
+      total: count,
+      skip,
+      limit,
+      data,
+    };
+  },
+
+  create(data: NewEvent) {
+    return db.insert(events).values(data).run();
+  },
 
   async getById(id: number) {
     const [event] = await db.select().from(events).where(eq(events.id, id));
@@ -13,7 +28,8 @@ export const eventService = {
   },
 
   async update(id: number, data: Partial<NewEvent>) {
-    const result = await db.update(events)
+    const result = await db
+      .update(events)
       .set(data)
       .where(eq(events.id, id))
       .run();
@@ -21,9 +37,7 @@ export const eventService = {
   },
 
   async delete(id: number) {
-    const result = await db.delete(events)
-      .where(eq(events.id, id))
-      .run();
+    const result = await db.delete(events).where(eq(events.id, id)).run();
     return result;
   },
 };

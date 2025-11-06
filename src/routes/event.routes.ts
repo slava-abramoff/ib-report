@@ -8,8 +8,22 @@ import fs from "fs";
 import { generateEventsPDF } from "../utils/pdf-generator";
 
 export default async function eventRoutes(fastify: FastifyInstance) {
-  fastify.get("/events", async () => {
-    return eventService.getAll();
+  fastify.get("/events", async (req, reply) => {
+    try {
+      const { skip, limit } = req.query as {
+        skip: number;
+        limit: number;
+      };
+
+      const skipNum = Number(skip) || 0;
+      const limitNum = Number(limit) || 10;
+
+      const result = eventService.getAll(skip, limit);
+
+      reply.code(200).send({ success: true, data: result });
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   fastify.post<{ Body: CreateEventDTO }>("/events", async (req, reply) => {
