@@ -6,7 +6,6 @@ export function generateEventsPDF(event: Event, outputPath: string) {
   const doc = new PDFDocument({ margin: 50 });
   doc.pipe(fs.createWriteStream(outputPath));
 
-  // Основной шрифт (Noto Sans поддерживает кириллицу)
   doc.font("/usr/share/fonts/noto/NotoSans-Regular.ttf");
   const emptyString = "____________________________";
 

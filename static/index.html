@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Отчет о событии информационной безопасности</title>
+    </head>
+    <body>
+        <h1>Отчет о событии информационной безопасности</h1>
+        <p>Дата события <input type="text" placeholder="текст" /></p>
+        <p>Номер события <input type="text" placeholder="текст" /></p>
+
+        <h2>Информация о сообщающем лице</h2>
+        <table>
+            <tr>
+                <td>Фамилия</td>
+                <td><input type="text" placeholder="текст" /></td>
+                <td>Адрес</td>
+                <td><input type="text" placeholder="текст" /></td>
+            </tr>
+            <tr>
+                <td>Организация</td>
+                <td colspan="5">
+                    <input
+                        type="text"
+                        style="width: 100%"
+                        placeholder="текст"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>Телефон</td>
+                <td><input type="text" placeholder="текст" /></td>
+                <td>Электронная почта</td>
+                <td><input type="text" placeholder="текст" /></td>
+            </tr>
+        </table>
+
+        <h2>Описание события ИБ "Подзаголовок2"</h2>
+        <p>
+            Что произошло<br /><textarea
+                placeholder="текст"
+                style="width: 100%"
+            ></textarea>
+        </p>
+        <p>
+            Как произошло<br /><textarea
+                placeholder="текст"
+                style="width: 100%"
+            ></textarea>
+        </p>
+        <p>
+            Почему произошло<br /><textarea
+                placeholder="текст"
+                style="width: 100%"
+            ></textarea>
+        </p>
+        <p>
+            Пораженные компоненты<br /><textarea
+                placeholder="текст"
+                style="width: 100%"
+            ></textarea>
+        </p>
+        <p>
+            Негативное воздействие на бизнес<br /><textarea
+                placeholder="текст"
+                style="width: 100%"
+            ></textarea>
+        </p>
+        <p>
+            Любые идентифицированные уязвимости<br /><textarea
+                placeholder="текст"
+                style="width: 100%"
+            ></textarea>
+        </p>
+
+        <h2>Подробности о событии ИБ "Подзаголовок3"</h2>
+        <p>
+            Дата и время наступления события
+            <input type="text" placeholder="текст" />
+        </p>
+        <p>
+            Дата и время обнаружения события
+            <input type="text" placeholder="текст" />
+        </p>
+        <p>
+            Дата и время сообщения о событии
+            <input type="text" placeholder="текст" />
+        </p>
+        <p>
+            Закончилось ли событие?
+            <select>
+                <option value="">Выбор из: да/нет</option>
+                <option value="да">да</option>
+                <option value="нет">нет</option>
+            </select>
+        </p>
+        <p>
+            Если "да", то уточнить длительность события в днях/часах/минутах
+            <input type="text" placeholder="сноска - текст" />
+        </p>
+
+        <script src="scripts/form-event.js"></script>
+    </body>
+</html>
