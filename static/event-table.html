@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>События</title>
+    </head>
+    <body>
+        <h1>Список событий</h1>
+
+        <table border="1" cellpadding="5" cellspacing="0" id="eventsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Дата</th>
+                    <th>Номер</th>
+                    <th>Фамилия</th>
+                    <th>Адрес</th>
+                    <th>Телефон</th>
+                    <th>Почта</th>
+                    <th>Что произошло</th>
+                    <th>Причина</th>
+                    <th>Корневая причина</th>
+                    <th>Затронутые компоненты</th>
+                    <th>Влияние на бизнес</th>
+                    <th>Выявленные уязвимости</th>
+                    <th>Событие решено</th>
+                    <th>Длительность</th>
+                    <th>Начало</th>
+                    <th>Обнаружение</th>
+                    <th>Окончание</th>
+                    <th>PDF</th>
+                </tr>
+            </thead>
+            <tbody id="eventsBody"></tbody>
+        </table>
+
+        <div id="pagination" style="margin-top: 20px">
+            <button id="prevBtn">Предыдущая</button>
+            <span id="pageInfo"></span>
+            <button id="nextBtn">Следующая</button>
+        </div>
+
+        <script src="scripts/event-table.js"></script>
+    </body>
+</html>
