@@ -18,7 +18,7 @@ export default async function eventRoutes(fastify: FastifyInstance) {
       const skipNum = Number(skip) || 0;
       const limitNum = Number(limit) || 10;
 
-      const result = eventService.getAll(skipNum, limitNum);
+      const result = await eventService.getAll(skipNum, limitNum);
 
       reply.code(200).send({ success: true, data: result });
     } catch (err) {

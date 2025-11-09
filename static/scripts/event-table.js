@@ -29,7 +29,6 @@ async function loadEvents(skip = 0) {
     total = totalCount;
     currentSkip = returnedSkip;
 
-    // Очистка таблицы
     tableBody.innerHTML = "";
 
     if (data.length === 0) {
