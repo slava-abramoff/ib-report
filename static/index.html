@@ -3,103 +3,291 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Отчет о событии информационной безопасности</title>
+        <title>Отчет о событии и инциденте ИБ</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                max-width: 900px;
+                margin: 40px auto;
+                line-height: 1.5;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            input,
+            textarea,
+            select {
+                width: 100%;
+                box-sizing: border-box;
+                margin-top: 5px;
+            }
+            .incident-form {
+                margin-top: 20px;
+                padding: 15px;
+                border: 1px solid #aaa;
+                background: #f9f9f9;
+            }
+            .hidden {
+                display: none;
+            }
+            button {
+                margin-top: 20px;
+                padding: 10px 20px;
+            }
+            h2,
+            h3 {
+                margin-top: 25px;
+            }
+        </style>
     </head>
     <body>
         <h1>Отчет о событии информационной безопасности</h1>
-        <p>Дата события <input type="text" placeholder="текст" /></p>
-        <p>Номер события <input type="text" placeholder="текст" /></p>
 
-        <h2>Информация о сообщающем лице</h2>
-        <table>
-            <tr>
-                <td>Фамилия</td>
-                <td><input type="text" placeholder="текст" /></td>
-                <td>Адрес</td>
-                <td><input type="text" placeholder="текст" /></td>
-            </tr>
-            <tr>
-                <td>Организация</td>
-                <td colspan="5">
-                    <input
-                        type="text"
-                        style="width: 100%"
-                        placeholder="текст"
-                    />
-                </td>
-            </tr>
-            <tr>
-                <td>Телефон</td>
-                <td><input type="text" placeholder="текст" /></td>
-                <td>Электронная почта</td>
-                <td><input type="text" placeholder="текст" /></td>
-            </tr>
-        </table>
+        <form id="eventForm">
+            <h2>Основные данные события</h2>
+            <p>Дата события <input name="date" type="text" /></p>
+            <p>Номер события <input name="number" type="text" /></p>
 
-        <h2>Описание события ИБ</h2>
-        <p>
-            Что произошло<br /><textarea
-                placeholder="текст"
-                style="width: 100%"
-            ></textarea>
-        </p>
-        <p>
-            Как произошло<br /><textarea
-                placeholder="текст"
-                style="width: 100%"
-            ></textarea>
-        </p>
-        <p>
-            Почему произошло<br /><textarea
-                placeholder="текст"
-                style="width: 100%"
-            ></textarea>
-        </p>
-        <p>
-            Пораженные компоненты<br /><textarea
-                placeholder="текст"
-                style="width: 100%"
-            ></textarea>
-        </p>
-        <p>
-            Негативное воздействие на бизнес<br /><textarea
-                placeholder="текст"
-                style="width: 100%"
-            ></textarea>
-        </p>
-        <p>
-            Любые идентифицированные уязвимости<br /><textarea
-                placeholder="текст"
-                style="width: 100%"
-            ></textarea>
-        </p>
+            <h2>Информация о сообщающем лице</h2>
+            <table>
+                <tr>
+                    <td>Фамилия</td>
+                    <td><input name="surname" type="text" /></td>
+                    <td>Адрес</td>
+                    <td><input name="address" type="text" /></td>
+                </tr>
+                <tr>
+                    <td>Телефон</td>
+                    <td><input name="phoneNumber" type="text" /></td>
+                    <td>Электронная почта</td>
+                    <td><input name="mail" type="text" /></td>
+                </tr>
+            </table>
 
-        <h2>Подробности о событии ИБ</h2>
-        <p>
-            Дата и время наступления события
-            <input type="text" placeholder="текст" />
-        </p>
-        <p>
-            Дата и время обнаружения события
-            <input type="text" placeholder="текст" />
-        </p>
-        <p>
-            Дата и время сообщения о событии
-            <input type="text" placeholder="текст" />
-        </p>
-        <p>
-            Закончилось ли событие?
-            <select>
-                <option value="">Выбор из: да/нет</option>
-                <option value="да">да</option>
-                <option value="нет">нет</option>
-            </select>
-        </p>
-        <p>
-            Если "да", то уточнить длительность события в днях/часах/минутах
-            <input type="text" placeholder="сноска - текст" />
-        </p>
+            <h2>Описание события</h2>
+            <p>Что произошло<br /><textarea name="happened"></textarea></p>
+            <p>Как произошло<br /><textarea name="happenedCause"></textarea></p>
+            <p>Почему произошло<br /><textarea name="rootCause"></textarea></p>
+            <p>
+                Пораженные компоненты<br /><textarea
+                    name="affectedComponents"
+                ></textarea>
+            </p>
+            <p>
+                Негативное воздействие на бизнес<br /><textarea
+                    name="businessImpact"
+                ></textarea>
+            </p>
+            <p>
+                Идентифицированные уязвимости<br /><textarea
+                    name="identifiedVulnerabilities"
+                ></textarea>
+            </p>
 
-        <script src="scripts/form-event.js"></script>
+            <h2>Подробности о событии</h2>
+            <p>
+                Дата и время наступления события
+                <input name="start" type="text" />
+            </p>
+            <p>
+                Дата и время обнаружения события
+                <input name="detect" type="text" />
+            </p>
+            <p>
+                Дата и время сообщения о событии
+                <input name="end" type="text" />
+            </p>
+            <p>
+                Закончилось ли событие?
+                <select name="isEventResolved">
+                    <option value="">-- выберите --</option>
+                    <option value="да">Да</option>
+                    <option value="нет">Нет</option>
+                </select>
+            </p>
+            <p>
+                Длительность события <input name="eventDuration" type="text" />
+            </p>
+        </form>
+
+        <h3>Является ли событие инцидентом?</h3>
+        <select id="isIncident">
+            <option value="">-- выберите --</option>
+            <option value="no">Нет</option>
+            <option value="yes">Да</option>
+        </select>
+
+        <div id="incidentFormContainer" class="hidden incident-form">
+            <h2>Форма инцидента</h2>
+            <form id="incidentForm">
+                <h3>Основные данные</h3>
+                <p>Дата инцидента <input name="incidentDate" type="text" /></p>
+                <p>
+                    Номер инцидента <input name="incidentNumber" type="text" />
+                </p>
+
+                <h3>Сотрудник группы эксплуатации</h3>
+                <p>Фамилия <input name="operationSurname" type="text" /></p>
+                <p>Адрес <input name="operationAddress" type="text" /></p>
+                <p>Телефон <input name="operationPhone" type="text" /></p>
+                <p>
+                    Электронная почта
+                    <input name="operationEmail" type="text" />
+                </p>
+
+                <h3>Сотрудник ГРИИБ</h3>
+                <p>Фамилия <input name="griibSurname" type="text" /></p>
+                <p>Адрес <input name="griibAddress" type="text" /></p>
+                <p>Телефон <input name="griibPhone" type="text" /></p>
+                <p>Электронная почта <input name="griibEmail" type="text" /></p>
+
+                <h3>Описание инцидента</h3>
+                <p>
+                    Что произошло<br /><textarea name="whatHappened"></textarea>
+                </p>
+                <p>
+                    Как произошло<br /><textarea name="howHappened"></textarea>
+                </p>
+                <p>
+                    Почему произошло<br /><textarea
+                        name="whyHappened"
+                    ></textarea>
+                </p>
+                <p>
+                    Пораженные компоненты<br /><textarea
+                        name="affectedComponents"
+                    ></textarea>
+                </p>
+                <p>
+                    Негативное воздействие<br /><textarea
+                        name="businessImpact"
+                    ></textarea>
+                </p>
+                <p>
+                    Идентифицированные уязвимости<br /><textarea
+                        name="identifiedVulnerabilities"
+                    ></textarea>
+                </p>
+
+                <h3>Временные данные</h3>
+                <p>
+                    Дата и время наступления
+                    <input name="startDateTime" type="text" />
+                </p>
+                <p>
+                    Дата и время обнаружения
+                    <input name="detectDateTime" type="text" />
+                </p>
+                <p>
+                    Дата и время сообщения
+                    <input name="reportDateTime" type="text" />
+                </p>
+
+                <h3>Статус</h3>
+                <p>
+                    Закончился ли инцидент?
+                    <select name="isIncidentResolved">
+                        <option value="">-- выберите --</option>
+                        <option value="true">Да</option>
+                        <option value="false">Нет</option>
+                    </select>
+                </p>
+
+                <h3>Тип инцидента</h3>
+                <p>
+                    <select name="incidentType">
+                        <option value="">-- выберите --</option>
+                        <option value="хищение">хищение</option>
+                        <option value="хакерство">хакерство</option>
+                        <option value="мошенничество">мошенничество</option>
+                        <option value="неправильное использование ресурсов">
+                            неправильное использование ресурсов
+                        </option>
+                        <option value="саботаж">саботаж</option>
+                        <option value="иное намеренное">иное намеренное</option>
+                        <option value="отказ аппаратуры">
+                            отказ аппаратуры
+                        </option>
+                        <option value="отказ ПО">отказ ПО</option>
+                        <option value="другие природные события">
+                            другие природные события
+                        </option>
+                        <option value="отказ системы связи">
+                            отказ системы связи
+                        </option>
+                        <option value="потеря значимых сервисов">
+                            потеря значимых сервисов
+                        </option>
+                        <option value="пожар">пожар</option>
+                        <option value="недостаточное кадровое обеспечение">
+                            недостаточное кадровое обеспечение
+                        </option>
+                        <option value="другие случайные случаи">
+                            другие случайные случаи
+                        </option>
+                        <option value="операционная ошибка">
+                            операционная ошибка
+                        </option>
+                        <option value="ошибка пользователя">
+                            ошибка пользователя
+                        </option>
+                        <option
+                            value="ошибка в эксплуатации аппаратных средств"
+                        >
+                            ошибка в эксплуатации аппаратных средств
+                        </option>
+                        <option value="ошибка проектирования">
+                            ошибка проектирования
+                        </option>
+                        <option value="ошибка в эксплуатации">
+                            ошибка в эксплуатации
+                        </option>
+                        <option value="другие случаи ошибок">
+                            другие случаи ошибок
+                        </option>
+                    </select>
+                </p>
+
+                <h3>Дополнительная информация</h3>
+                <p>Информация <input name="information" type="text" /></p>
+                <p>Аппаратные средства <input name="hardware" type="text" /></p>
+                <p>
+                    Программное обеспечение
+                    <input name="software" type="text" />
+                </p>
+                <p>
+                    Средства связи
+                    <input name="communicationMeans" type="text" />
+                </p>
+                <p>Документация <input name="documentation" type="text" /></p>
+
+                <h3>Негативное воздействие</h3>
+                <p>
+                    <select name="negativeImpact">
+                        <option value="">-- выберите --</option>
+                        <option value="нарушение конфиденциальности">
+                            нарушение конфиденциальности
+                        </option>
+                        <option value="нарушение целостности">
+                            нарушение целостности
+                        </option>
+                        <option value="нарушение доступности">
+                            нарушение доступности
+                        </option>
+                        <option value="нарушение неотказуемости">
+                            нарушение неотказуемости
+                        </option>
+                        <option value="уничтожение">уничтожение</option>
+                        <option value="значимость указатели">
+                            значимость указатели
+                        </option>
+                    </select>
+                </p>
+            </form>
+        </div>
+
+        <button id="sendBtn">Отправить</button>
+        <script src="scripts/form.js"></script>
     </body>
 </html>
