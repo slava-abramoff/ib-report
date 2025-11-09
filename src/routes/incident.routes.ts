@@ -5,6 +5,9 @@ import {
   createIncidentSchema,
 } from "../dto/create-incident.dto";
 import { ZodError } from "zod";
+import path from "path";
+import fs from "fs";
+import { generateIncidentsPDF } from "../utils/pdf-generator";
 
 export default async function incidentRoutes(fastify: FastifyInstance) {
   fastify.get("/incidents", async (req, reply) => {
@@ -20,6 +23,35 @@ export default async function incidentRoutes(fastify: FastifyInstance) {
       const result = await incidentService.getAll(skipNum, limitNum);
 
       reply.code(200).send({ success: true, data: result });
+    } catch (err) {
+      console.error(err);
+      reply.code(500).send({ error: "Internal server error" });
+    }
+  });
+
+  fastify.get("/incidents/:id/doc", async (req, reply) => {
+    try {
+      const { id } = req.params as { id: number };
+
+      if (isNaN(id)) return reply.code(401).send({ error: "Bad request" });
+
+      const incident = await incidentService.getById(id);
+      if (!incident)
+        return reply.code(404).send({ error: "Incidents not found" });
+
+      const outputPath = path.resolve(
+        `./src/tmp/incident_doc-${incident.incidentNumber}`,
+      );
+
+      generateIncidentsPDF(incident, outputPath);
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      if (!fs.existsSync(outputPath)) {
+        return reply.code(500).send({ error: "Failed to generate PDF" });
+      }
+
+      reply.redirect(`/docs/incident/${incident.incidentNumber}`);
     } catch (err) {
       console.error(err);
       reply.code(500).send({ error: "Internal server error" });

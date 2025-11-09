@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Инциденты</title>
+    </head>
+    <body>
+        <h1>Список инцидентов</h1>
+
+        <table border="1" cellpadding="5" cellspacing="0" id="incidentsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Дата инцидента</th>
+                    <th>Номер</th>
+                    <th>ФИО (эксплуатация)</th>
+                    <th>Адрес (экспл.)</th>
+                    <th>Телефон (экспл.)</th>
+                    <th>Email (экспл.)</th>
+                    <th>ФИО (ГРИИБ)</th>
+                    <th>Адрес (ГРИИБ)</th>
+                    <th>Телефон (ГРИИБ)</th>
+                    <th>Email (ГРИИБ)</th>
+                    <th>Что произошло</th>
+                    <th>Как произошло</th>
+                    <th>Почему произошло</th>
+                    <th>Затронутые компоненты</th>
+                    <th>Влияние на бизнес</th>
+                    <th>Выявленные уязвимости</th>
+                    <th>Начало</th>
+                    <th>Обнаружение</th>
+                    <th>Отчёт</th>
+                    <th>Решён</th>
+                    <th>Тип инцидента</th>
+                    <th>Информация</th>
+                    <th>Аппаратура</th>
+                    <th>ПО</th>
+                    <th>Связь</th>
+                    <th>Документация</th>
+                    <th>Негативное воздействие</th>
+                    <th>PDF</th>
+                </tr>
+            </thead>
+            <tbody id="incidentsBody"></tbody>
+        </table>
+
+        <div id="pagination" style="margin-top: 20px">
+            <button id="prevBtn">Предыдущая</button>
+            <span id="pageInfo"></span>
+            <button id="nextBtn">Следующая</button>
+        </div>
+
+        <script src="scripts/incident-table.js"></script>
+    </body>
+</html>
