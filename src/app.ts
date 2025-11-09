@@ -3,10 +3,12 @@ import eventRoutes from "./routes/event.routes";
 import docRoutes from "./routes/doc.routes";
 import fastifyStatic from "@fastify/static";
 import path from "path";
+import incidentRoutes from "./routes/incident.routes";
 
 const app = Fastify({ logger: true });
 app.register(eventRoutes);
 app.register(docRoutes);
+app.register(incidentRoutes);
 
 app.register(fastifyStatic, {
   root: path.join(__dirname, "../static"),
