@@ -48,19 +48,7 @@ async function loadEvents(skip = 0) {
         <td>${truncateText(event.number)}</td>
         <td>${truncateText(event.surname)}</td>
         <td>${truncateText(event.address)}</td>
-        <td>${truncateText(event.phoneNumber)}</td>
-        <td>${truncateText(event.mail)}</td>
-        <td>${truncateText(event.happened)}</td>
-        <td>${truncateText(event.happenedCause)}</td>
-        <td>${truncateText(event.rootCause)}</td>
-        <td>${truncateText(event.affectedComponents)}</td>
-        <td>${truncateText(event.businessImpact)}</td>
-        <td>${truncateText(event.identifiedVulnerabilities)}</td>
         <td>${event.isEventResolved ? "Да" : "Нет"}</td>
-        <td>${truncateText(event.eventDuration)}</td>
-        <td>${truncateText(event.start)}</td>
-        <td>${truncateText(event.detect)}</td>
-        <td>${truncateText(event.end)}</td>
         <td><a href="/events/${event.id}/doc" target="_blank">PDF</a></td>
       `;
 

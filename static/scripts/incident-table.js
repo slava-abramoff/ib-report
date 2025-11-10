@@ -52,29 +52,9 @@ async function loadIncidents(skip = 0) {
         <td>${truncateText(incident.incidentNumber)}</td>
         <td>${truncateText(incident.operationSurname)}</td>
         <td>${truncateText(incident.operationAddress)}</td>
-        <td>${truncateText(incident.operationPhone)}</td>
-        <td>${truncateText(incident.operationEmail)}</td>
         <td>${truncateText(incident.griibSurname)}</td>
         <td>${truncateText(incident.griibAddress)}</td>
-        <td>${truncateText(incident.griibPhone)}</td>
-        <td>${truncateText(incident.griibEmail)}</td>
-        <td>${truncateText(incident.whatHappened)}</td>
-        <td>${truncateText(incident.howHappened)}</td>
-        <td>${truncateText(incident.whyHappened)}</td>
-        <td>${truncateText(incident.affectedComponents)}</td>
-        <td>${truncateText(incident.businessImpact)}</td>
-        <td>${truncateText(incident.identifiedVulnerabilities)}</td>
-        <td>${truncateText(incident.startDateTime)}</td>
-        <td>${truncateText(incident.detectDateTime)}</td>
-        <td>${truncateText(incident.reportDateTime)}</td>
         <td>${incident.isIncidentResolved ? "Да" : "Нет"}</td>
-        <td>${truncateText(incident.incidentType)}</td>
-        <td>${truncateText(incident.information)}</td>
-        <td>${truncateText(incident.hardware)}</td>
-        <td>${truncateText(incident.software)}</td>
-        <td>${truncateText(incident.communicationMeans)}</td>
-        <td>${truncateText(incident.documentation)}</td>
-        <td>${truncateText(incident.negativeImpact)}</td>
         <td><a href="/incidents/${incident.id}/doc" target="_blank">PDF</a></td>
       `;
 
