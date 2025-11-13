@@ -33,8 +33,11 @@ const negativeImpactEnum = [
 ] as const;
 
 export const createIncidentSchema = z.object({
+  // Основные данные
   incidentDate: z.string().optional(),
   incidentNumber: z.string().optional(),
+
+  // Сотрудник группы обеспечения эксплуатации
   operationSurname: z.string().optional(),
   operationAddress: z.string().optional(),
   operationPhone: z.string().optional(),

@@ -35,6 +35,24 @@ export const negativeImpactEnum = [
   "значимость указатели",
 ] as const;
 
+// ENUM для типа нарушителя
+export const violatorTypeEnum = [
+  "PE Лицо", // Лицо
+  "OI Организация/учреждение", // Организация/учреждение
+  "GR Организованная группа", // Организованная группа
+  "AC Случайность", // Случайность
+  "NP Отсутствие нарушителя", // Отсутствие нарушителя
+] as const;
+
+// ENUM для мотивации нарушителя
+export const motivationEnum = [
+  "CG Криминальная/финансовая выгода", // Криминальная/финансовая выгода
+  "PH Развлечение/хакерство", // Развлечение/хакерство
+  "PT Политика/терроризм", // Политика/терроризм
+  "RE Месть", // Месть
+  "OM Другие мотивы", // Другие мотивы
+] as const;
+
 export const incidents = sqliteTable("incident", {
   id: integer("id").primaryKey({ autoIncrement: true }),
 
@@ -70,7 +88,7 @@ export const incidents = sqliteTable("incident", {
   // Статус
   isIncidentResolved: integer("is_incident_resolved", { mode: "boolean" }),
 
-  // Тип инцидента (enum)
+  // Тип инцидента
   incidentType: text("incident_type", {
     enum: incidentTypeEnum,
   }),
@@ -82,11 +100,40 @@ export const incidents = sqliteTable("incident", {
   communicationMeans: text("communication_means"),
   documentation: text("documentation"),
 
-  // Негативное воздействие (enum)
+  // Негативное воздействие
   negativeImpact: text("negative_impact", {
     enum: negativeImpactEnum,
   }),
 
+  // ───────────────────────────────────────────────
+  // СТРАНИЦА 4 — Разрешение инцидента
+  // ───────────────────────────────────────────────
+
+  // Подзаголовок 1 — Разрешение инцидента
+  investigationStartDate: text("investigation_start_date"),
+  investigators: text("investigators"),
+  incidentEndDate: text("incident_end_date"),
+  impactEndDate: text("impact_end_date"),
+  investigationEndDate: text("investigation_end_date"),
+  investigationReportLocation: text("investigation_report_location"),
+
+  // Подзаголовок 2 — Причастные лица / нарушители
+  violatorType: text("violator_type", {
+    enum: violatorTypeEnum,
+  }),
+  violatorDescription: text("violator_description"),
+
+  // Подзаголовок 3 — Мотивация
+  violatorMotivation: text("violator_motivation", {
+    enum: motivationEnum,
+  }),
+
+  // Подзаголовок 4–6 — Действия по разрешению
+  resolutionActions: text("resolution_actions"),
+  plannedResolutionActions: text("planned_resolution_actions"),
+  otherActions: text("other_actions"),
+
+  // Служебные метки
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),

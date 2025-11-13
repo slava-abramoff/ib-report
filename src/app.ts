@@ -19,6 +19,10 @@ app.get("/", (req, reply) => {
   reply.sendFile("index.html");
 });
 
+app.get("/form", (req, reply) => {
+  reply.sendFile("form.html");
+});
+
 app.get("/event-table", (req, reply) => {
   reply.sendFile("event-table.html");
 });
