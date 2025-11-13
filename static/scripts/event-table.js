@@ -50,6 +50,7 @@ async function loadEvents(skip = 0) {
         <td>${truncateText(event.address)}</td>
         <td>${event.isEventResolved ? "Да" : "Нет"}</td>
         <td><a href="/events/${event.id}/doc" target="_blank">PDF</a></td>
+        <td><a href="/event-details/${event.id}"> Подробнее</a></td>
       `;
 
       tableBody.appendChild(row);

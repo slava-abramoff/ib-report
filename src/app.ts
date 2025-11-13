@@ -27,6 +27,11 @@ app.get("/incident-table", (req, reply) => {
   reply.sendFile("incident-table.html");
 });
 
+app.get('/event-details/:id', (req, reply) => {
+  reply.sendFile("event-details.html")
+})
+
+
 app.listen({ port: 3000 }, (err, address) => {
   if (err) throw err;
   console.log(`Server is started on ${address}`);

@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const sendBtn = document.getElementById("sendBtn");
 
-  // Показ/скрытие формы инцидента
   isIncidentSelect.addEventListener("change", () => {
     if (isIncidentSelect.value === "yes") {
       incidentFormContainer.classList.remove("hidden");
@@ -15,16 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   sendBtn.addEventListener("click", async () => {
-    // Собираем данные события
     const eventForm = document.getElementById("eventForm");
     const eventData = Object.fromEntries(new FormData(eventForm).entries());
 
-    // Конвертируем isEventResolved в boolean
     if ("isEventResolved" in eventData) {
       eventData.isEventResolved = eventData.isEventResolved === "да";
     }
 
-    // Проверка обязательных полей события
     const requiredEventFields = [
       "date",
       "number",
@@ -51,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sendBtn.textContent = "Отправка...";
 
     try {
-      // Отправляем событие
       const eventResp = await fetch("/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,23 +58,21 @@ document.addEventListener("DOMContentLoaded", () => {
       const eventResJson = await eventResp.json();
       const eventId = eventResJson.id;
 
-      // Если выбрано "Да" — отправляем инцидент
+
       if (isIncidentSelect.value === "yes") {
         const incidentForm = document.getElementById("incidentForm");
         const incidentData = Object.fromEntries(
           new FormData(incidentForm).entries(),
         );
 
-        // Конвертируем isIncidentResolved в boolean
+
         if ("isIncidentResolved" in incidentData) {
           incidentData.isIncidentResolved =
             incidentData.isIncidentResolved === "true";
         }
 
-        // Привязка к событию
         incidentData.eventId = eventId;
 
-        // Отправляем инцидент
         const incidentResp = await fetch("/incidents", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -94,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("✅ Событие успешно отправлено!");
       }
 
-      // Сброс форм
       eventForm.reset();
       document.getElementById("incidentForm").reset();
       incidentFormContainer.classList.add("hidden");

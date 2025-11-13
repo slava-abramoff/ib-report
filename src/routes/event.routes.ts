@@ -26,6 +26,23 @@ export default async function eventRoutes(fastify: FastifyInstance) {
     }
   });
 
+  fastify.get("/events/:id", async (req, reply) => {
+    try {
+      const { id } = req.params as { id: string };
+      const numId = Number(id);
+      if (isNaN(numId)) return reply.code(400).send({ error: "Bad request" });
+
+      const event = await eventService.getById(numId);
+      if (!event)
+        return reply.code(404).send({ error: "Event not found" });
+
+      reply.code(200).send({ success: true, data: event });
+    } catch (err) {
+      console.error(err);
+      reply.code(500).send({ error: "Internal server error" });
+    }
+  });
+
   fastify.post<{ Body: CreateEventDTO }>("/events", async (req, reply) => {
     try {
       const parsedBody = createEventSchema.parse(req.body);
