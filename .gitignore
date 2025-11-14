@@ -16,6 +16,9 @@ build/
 # SQLite database
 src/db/database.sqlite
 
+# files
+temp/
+
 # Drizzle migrations SQL (если не хотите хранить SQL-файлы)
  src/db/migrations/
 

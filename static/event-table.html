@@ -3,9 +3,28 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="styles/header.css" />
+        <link rel="stylesheet" href="styles/main.css" />
+        <link rel="stylesheet" href="styles/table.css" />
         <title>События</title>
     </head>
     <body>
+        <header>
+            <div class="logo">IB report</div>
+
+            <nav>
+                <ul>
+                    <li>
+                        <a href="/form">Создание отчёта</a>
+                    </li>
+                    <li>
+                        <a href="/event-table" class="active">Список событий</a>
+                    </li>
+                    <li><a href="/incident-table">Список инцидентов</a></li>
+                </ul>
+            </nav>
+        </header>
+
         <h1>Список событий</h1>
 
         <table border="1" cellpadding="5" cellspacing="0" id="eventsTable">

@@ -15,10 +15,6 @@ app.register(fastifyStatic, {
   prefix: "/",
 });
 
-app.get("/", (req, reply) => {
-  reply.sendFile("index.html");
-});
-
 app.get("/form", (req, reply) => {
   reply.sendFile("form.html");
 });
@@ -31,10 +27,9 @@ app.get("/incident-table", (req, reply) => {
   reply.sendFile("incident-table.html");
 });
 
-app.get('/event-details/:id', (req, reply) => {
-  reply.sendFile("event-details.html")
-})
-
+app.get("/event-details/:id", (req, reply) => {
+  reply.sendFile("event-details.html");
+});
 
 app.listen({ port: 3000 }, (err, address) => {
   if (err) throw err;
