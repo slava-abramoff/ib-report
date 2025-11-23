@@ -18,29 +18,24 @@
                         <a href="/form">Создание отчёта</a>
                     </li>
                     <li>
-                        <a href="/event-table" class="active">Список событий</a>
+                        <a href="/event-table">Список событий</a>
                     </li>
                     <li><a href="/incident-table">Список инцидентов</a></li>
-                    <li id="userslist" style="display: none">
+                    <li id="userslist" class="active">
                         <a href="/users-table">Список список пользователей</a>
                     </li>
                 </ul>
             </nav>
         </header>
 
-        <h1>Список событий</h1>
+        <h1>Список пользователей</h1>
 
-        <table border="1" cellpadding="5" cellspacing="0" id="eventsTable">
+        <table border="1" cellpadding="5" cellspacing="0" id="usersTable">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Дата</th>
-                    <th>Номер</th>
-                    <th>ФИО</th>
-                    <th>Адрес</th>
-                    <th>Событие решено</th>
-                    <th>PDF</th>
-                    <th>Подробнее</th>
+                    <th>Логин</th>
+                    <th>Роль</th>
                 </tr>
             </thead>
             <tbody id="eventsBody"></tbody>
@@ -52,7 +47,7 @@
             <button id="nextBtn">Следующая</button>
         </div>
 
-        <script src="scripts/event-table.js"></script>
+        <script src="scripts/users-table.js"></script>
         <script src="scripts/hidden-content.js"></script>
     </body>
 </html>

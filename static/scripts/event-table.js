@@ -1,6 +1,5 @@
-const API_URL = "/events"; // Замени на реальный путь, если нужно
+const API_URL = "/events"; // оставь как есть, если бэкенд на том же домене
 const LIMIT = 10;
-
 let currentSkip = 0;
 let total = 0;
 
@@ -8,6 +7,25 @@ const tableBody = document.getElementById("eventsBody");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageInfo = document.getElementById("pageInfo");
+
+// Универсальная функция для fetch с токеном
+async function apiFetch(url, options = {}) {
+  const token = localStorage.getItem("token");
+
+  // Если токена нет — сразу на логин
+  if (!token) {
+    window.location.href = "/login.html";
+    return;
+  }
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+    ...options.headers, // если вдруг захочешь передать свои заголовки
+  };
+
+  return fetch(url, { ...options, headers });
+}
 
 // Функция обрезки текста
 function truncateText(text, maxLength = 50) {
@@ -18,16 +36,26 @@ function truncateText(text, maxLength = 50) {
 
 async function loadEvents(skip = 0) {
   try {
-    const response = await fetch(`${API_URL}?skip=${skip}&limit=${LIMIT}`);
+    const response = await apiFetch(`${API_URL}?skip=${skip}&limit=${LIMIT}`);
+
+    // Если сервер вернул 401 — токен протух или неверный
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("login");
+      window.location.href = "/login.html";
+      return;
+    }
+
     const result = await response.json();
 
     if (!result.success || !result.data) {
-      tableBody.innerHTML = '<tr><td colspan="19">Ошибка загрузки</td></tr>';
+      tableBody.innerHTML =
+        '<tr><td colspan="19">Ошибка загрузки данных</td></tr>';
       return;
     }
 
     const { data: events, total: totalCount, skip: returnedSkip } = result.data;
-
     total = totalCount;
     currentSkip = returnedSkip;
 
@@ -41,18 +69,16 @@ async function loadEvents(skip = 0) {
 
     events.forEach((event) => {
       const row = document.createElement("tr");
-
       row.innerHTML = `
-        <td>${event.id || ""}</td>
-        <td>${truncateText(event.date)}</td>
-        <td>${truncateText(event.number)}</td>
-        <td>${truncateText(event.surname)}</td>
-        <td>${truncateText(event.address)}</td>
-        <td>${event.isEventResolved ? "Да" : "Нет"}</td>
-        <td><a href="/events/${event.id}/doc" target="_blank">PDF</a></td>
-        <td><a href="/event-details/${event.id}"> Подробнее</a></td>
-      `;
-
+                <td>${event.id || ""}</td>
+                <td>${truncateText(event.date)}</td>
+                <td>${truncateText(event.number)}</td>
+                <td>${truncateText(event.surname)}</td>
+                <td>${truncateText(event.address)}</td>
+                <td>${event.isEventResolved ? "Да" : "Нет"}</td>
+                <td><a href="/events/${event.id}/doc" target="_blank">PDF</a></td>
+                <td><a href="/event-details/${event.id}"> Подробнее</a></td>
+            `;
       tableBody.appendChild(row);
     });
 
@@ -66,9 +92,7 @@ async function loadEvents(skip = 0) {
 function updatePagination() {
   const currentPage = Math.floor(currentSkip / LIMIT) + 1;
   const totalPages = Math.ceil(total / LIMIT) || 1;
-
   pageInfo.textContent = `Страница ${currentPage} из ${totalPages} (всего: ${total})`;
-
   prevBtn.disabled = currentSkip === 0;
   nextBtn.disabled = currentSkip + LIMIT >= total;
 }
@@ -86,5 +110,11 @@ nextBtn.addEventListener("click", () => {
   }
 });
 
-// Стартовая загрузка
-loadEvents(0);
+// Стартовая загрузка + проверка токена
+(function checkAuthAndLoad() {
+  if (!localStorage.getItem("token")) {
+    window.location.href = "/login.html";
+    return;
+  }
+  loadEvents(0);
+})();

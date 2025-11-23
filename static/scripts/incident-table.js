@@ -1,6 +1,6 @@
+// incident-table.js — исправленная версия
 const API_URL = "/incidents";
 const LIMIT = 10;
-
 let currentSkip = 0;
 let total = 0;
 
@@ -15,14 +15,44 @@ function truncateText(text, maxLength = 50) {
   return str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
 }
 
+// ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ — добавляет токен в запрос
+async function authFetch(url) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Вы не авторизованы!");
+    window.location.href = "/form";
+    return null;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // на всякий случай, если используешь куки
+  });
+
+  // Если сервер вернул 401 — редиректим на логин
+  if (response.status === 401) {
+    alert("Сессия истекла. Войдите заново.");
+    localStorage.removeItem("token");
+    window.location.href = "/form";
+    return null;
+  }
+
+  return response;
+}
+
 async function loadIncidents(skip = 0) {
   try {
-    const response = await fetch(`${API_URL}?skip=${skip}&limit=${LIMIT}`);
+    const response = await authFetch(`${API_URL}?skip=${skip}&limit=${LIMIT}`);
+    if (!response) return;
+
     const result = await response.json();
 
     if (!result.success || !result.data) {
       tableBody.innerHTML =
-        '<tr><td colspan="29">Ошибка загрузки данных</td></tr>';
+        '<tr><td colspan="10">Ошибка загрузки данных</td></tr>';
       return;
     }
 
@@ -38,14 +68,13 @@ async function loadIncidents(skip = 0) {
     tableBody.innerHTML = "";
 
     if (incidents.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="29">Нет данных</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="10">Нет данных</td></tr>';
       updatePagination();
       return;
     }
 
     incidents.forEach((incident) => {
       const row = document.createElement("tr");
-
       row.innerHTML = `
         <td>${incident.id || ""}</td>
         <td>${truncateText(incident.incidentDate)}</td>
@@ -56,24 +85,22 @@ async function loadIncidents(skip = 0) {
         <td>${truncateText(incident.griibAddress)}</td>
         <td>${incident.isIncidentResolved ? "Да" : "Нет"}</td>
         <td><a href="/incidents/${incident.id}/doc" target="_blank">PDF</a></td>
+        <td><a href="/incident-details/${incident.id}">Подробнее</a></td>
       `;
-
       tableBody.appendChild(row);
     });
 
     updatePagination();
   } catch (err) {
     console.error("Ошибка:", err);
-    tableBody.innerHTML = '<tr><td colspan="29">Ошибка сети</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="10">Ошибка сети</td></tr>';
   }
 }
 
 function updatePagination() {
   const currentPage = Math.floor(currentSkip / LIMIT) + 1;
   const totalPages = Math.ceil(total / LIMIT) || 1;
-
   pageInfo.textContent = `Страница ${currentPage} из ${totalPages} (всего: ${total})`;
-
   prevBtn.disabled = currentSkip === 0;
   nextBtn.disabled = currentSkip + LIMIT >= total;
 }
@@ -86,4 +113,5 @@ nextBtn.addEventListener("click", () => {
   if (currentSkip + LIMIT < total) loadIncidents(currentSkip + LIMIT);
 });
 
+// Загружаем при старте
 loadIncidents(0);

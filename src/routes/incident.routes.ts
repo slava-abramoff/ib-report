@@ -10,7 +10,9 @@ import fs from "fs";
 import { generateIncidentsPDF } from "../utils/pdf-generator";
 
 export default async function incidentRoutes(fastify: FastifyInstance) {
-  fastify.get("/incidents", async (req, reply) => {
+  const auth = fastify.auth;
+
+  fastify.get("/incidents", { preHandler: [auth] }, async (req, reply) => {
     try {
       const { skip, limit } = req.query as {
         skip?: string;
@@ -60,6 +62,7 @@ export default async function incidentRoutes(fastify: FastifyInstance) {
 
   fastify.post<{ Body: CreateIncidentDTO }>(
     "/incidents",
+    { preHandler: [auth] },
     async (req, reply) => {
       try {
         const parsedBody = createIncidentSchema.parse(req.body);
