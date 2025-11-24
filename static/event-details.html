@@ -3,7 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="styles/header.css" />
+        <link rel="stylesheet" href="/styles/header.css" />
+        <link rel="stylesheet" href="/styles/details.css" />
+        <link rel="stylesheet" href="/styles/main.css" />
         <title>Событие</title>
     </head>
     <body>
@@ -35,15 +37,15 @@
                     <dt>ID</dt>
                     <dd id="id">—</dd>
 
-                    <dt>Дата (date)</dt>
+                    <dt>Дата</dt>
                     <dd id="date">—</dd>
-                    <dt>Начало (start)</dt>
+                    <dt>Начало</dt>
                     <dd id="start">—</dd>
-                    <dt>Обнаружено (detect)</dt>
+                    <dt>Обнаружено</dt>
                     <dd id="detect">—</dd>
-                    <dt>Окончание (end)</dt>
+                    <dt>Окончание</dt>
                     <dd id="end">—</dd>
-                    <dt>Длительность события (eventDuration)</dt>
+                    <dt>Длительность события</dt>
                     <dd id="eventDuration">—</dd>
 
                     <dt>Адрес</dt>
@@ -63,17 +65,17 @@
             <section>
                 <h2>Описание и причины</h2>
                 <dl>
-                    <dt>Что случилось (happened)</dt>
+                    <dt>Что случилось</dt>
                     <dd id="happened">—</dd>
-                    <dt>Причина (happenedCause)</dt>
+                    <dt>Как произошло</dt>
                     <dd id="happenedCause">—</dd>
-                    <dt>Корень проблемы (rootCause)</dt>
+                    <dt>Почему произошло</dt>
                     <dd id="rootCause">—</dd>
-                    <dt>Затронутые компоненты (affectedComponents)</dt>
+                    <dt>Пораженные компоненты</dt>
                     <dd id="affectedComponents">—</dd>
-                    <dt>Выявленные уязвимости (identifiedVulnerabilities)</dt>
+                    <dt>Идентифицированные уязвимости</dt>
                     <dd id="identifiedVulnerabilities">—</dd>
-                    <dt>Бизнес-эффект (businessImpact)</dt>
+                    <dt>Негативное воздействие на бизнес</dt>
                     <dd id="businessImpact">—</dd>
                 </dl>
             </section>
@@ -81,14 +83,12 @@
             <section>
                 <h2>Статусы</h2>
                 <dl>
-                    <dt>Решено ли событие (isEventResolved)</dt>
+                    <dt>Закончилось ли событие?</dt>
                     <dd id="isEventResolved">—</dd>
-                    <dt>Дата создания (createdAt)</dt>
-                    <dd id="createdAt">—</dd>
                 </dl>
             </section>
         </main>
         <script src="/scripts/event-details.js"></script>
-        <script src="scripts/hidden-content.js"></script>
+        <script src="/scripts/hidden-content.js"></script>
     </body>
 </html>

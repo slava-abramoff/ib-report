@@ -28,6 +28,9 @@ export const eventService = {
   },
 
   async update(id: number, data: Partial<NewEvent>) {
+    if (Object.keys(data).length === 0) {
+      return { changes: 0 };
+    }
     const result = await db
       .update(events)
       .set(data)
