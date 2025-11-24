@@ -150,7 +150,7 @@ function makeFieldsEditable() {
   });
 }
 
-// Сбор только изменённых полей с точным соответствием колонкам БД
+
 function collectFormData() {
   const data = {};
 
