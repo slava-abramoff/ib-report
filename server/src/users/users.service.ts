@@ -13,8 +13,20 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.user.findMany();
+  async findAll(skip = 0, take = 10) {
+    const total = await this.prisma.user.count();
+
+    const data = await this.prisma.user.findMany({
+      skip,
+      take,
+    });
+
+    return {
+      total,
+      skip,
+      take,
+      data,
+    };
   }
 
   async findOne(id: number) {

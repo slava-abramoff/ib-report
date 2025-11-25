@@ -6,9 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, PaginationUser } from './dto/create-user.dto';
 
 @Controller('api/users')
 export class UsersController {
@@ -20,8 +21,10 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() p: PaginationUser) {
+    const skip = Number(p.skip);
+    const take = Number(p.take);
+    return this.usersService.findAll(skip, take);
   }
 
   @Get(':id')

@@ -7,12 +7,15 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { IncidentsService } from './incidents.service';
 import {
   CreateIncidentDto,
   PaginationIncident,
 } from './dto/create-incident.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CurrentUser } from 'src/auth/current-user.decorator';
 
 @Controller('api/incidents')
 export class IncidentsController {
@@ -32,7 +35,9 @@ export class IncidentsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  @UseGuards(JwtAuthGuard)
+  findOne(@Param('id') id: string, @CurrentUser() user: any) {
+    console.log(user.role);
     return this.incidentsService.findOne(+id);
   }
 

@@ -15,3 +15,8 @@ export class CreateUserDto {
   @IsEnum(Role)
   role: Role;
 }
+
+export class PaginationUser {
+  skip: string;
+  take: string;
+}
