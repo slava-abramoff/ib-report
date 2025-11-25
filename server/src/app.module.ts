@@ -4,9 +4,10 @@ import { AuthModule } from './auth/auth.module';
 import { DocsModule } from './docs/docs.module';
 import { EventsModule } from './events/events.module';
 import { IncidentsModule } from './incidents/incidents.module';
+import { StaticPagesModule } from './static-pages/static-pages.module';
 
 @Module({
-  imports: [UsersModule, AuthModule, DocsModule, EventsModule, IncidentsModule],
+  imports: [UsersModule, AuthModule, DocsModule, EventsModule, IncidentsModule, StaticPagesModule],
   controllers: [],
   providers: [],
 })
