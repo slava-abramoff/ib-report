@@ -37,8 +37,6 @@ function truncateText(text, maxLength = 50) {
 async function loadEvents(skip = 0) {
   try {
     const response = await apiFetch(`${API_URL}?skip=${skip}&take=${LIMIT}`);
-
-    // Если сервер вернул 401 — токен протух или неверный
     if (response.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
@@ -49,19 +47,15 @@ async function loadEvents(skip = 0) {
 
     const result = await response.json();
 
-    if (!result.success || !result.data) {
-      tableBody.innerHTML =
-        '<tr><td colspan="19">Ошибка загрузки данных</td></tr>';
-      return;
-    }
+    // Деструктурируем прямо из result
+    const { data: events, total: totalCount, skip: returnedSkip } = result;
 
-    const { data: events, total: totalCount, skip: returnedSkip } = result.data;
     total = totalCount;
     currentSkip = returnedSkip;
 
     tableBody.innerHTML = '';
 
-    if (events.length === 0) {
+    if (!events || events.length === 0) {
       tableBody.innerHTML = '<tr><td colspan="19">Нет данных</td></tr>';
       updatePagination();
       return;

@@ -14,16 +14,12 @@ export class IncidentsService {
   }
 
   async findAll(skip = 0, take = 10, type: IncidentType | null) {
-    const where: any = {};
-
-    if (type !== undefined && type !== null) {
-      where.type = type;
-    }
-
-    const total = await this.prisma.incident.count(where);
+    const total = await this.prisma.incident.count({
+      where: { incidentType: type ?? { not: null } },
+    });
 
     const data = await this.prisma.incident.findMany({
-      where,
+      where: { incidentType: type ?? { not: null } },
       skip,
       take,
       orderBy: {

@@ -18,17 +18,17 @@ export class StaticPagesController {
     return this.send(res, 'event-table.html');
   }
 
-  @Get('events/details')
+  @Get('event-details/:id')
   eventsDetails(@Res() res: Response) {
     return this.send(res, 'event-details.html');
   }
 
-  @Get('incident-table')
+  @Get('incident-table/:type')
   incidents(@Res() res: Response) {
     return this.send(res, 'incident-table.html');
   }
 
-  @Get('incidents/details')
+  @Get('incident-details/:id')
   incidentsDetails(@Res() res: Response) {
     return this.send(res, 'incident-details.html');
   }

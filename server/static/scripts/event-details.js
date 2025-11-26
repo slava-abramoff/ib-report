@@ -58,7 +58,7 @@ async function authFetch(url, options = {}) {
   if (response.status === 401) {
     alert('Сессия истекла. Войдите заново.');
     localStorage.removeItem('token');
-    window.location.href = '/form';
+    window.location.href = '/login';
     return null;
   }
   return response;
@@ -77,9 +77,9 @@ function createAdminControls() {
 
   editBtn = btn('Редактировать', () => enterEditMode(), '#007bff');
   deleteBtn = btn('Удалить событие', () => confirmDelete(), '#dc3545');
-  similarBtn = btn('Похожие', () => alert('Функция в разработке'), '#17a2b8');
+  // similarBtn = btn('Похожие', () => alert('Функция в разработке'), '#17a2b8');
 
-  controls.append(editBtn, similarBtn, deleteBtn);
+  controls.append(editBtn, deleteBtn);
   title.after(controls);
 }
 
@@ -125,7 +125,7 @@ function exitEditMode() {
 
   const controls = document.querySelector('.admin-controls');
   controls.innerHTML = '';
-  controls.append(editBtn, similarBtn, deleteBtn);
+  controls.append(editBtn, deleteBtn);
 }
 
 // Делаем поля редактируемыми
@@ -153,46 +153,55 @@ function makeFieldsEditable() {
 function collectFormData() {
   const data = {};
 
-  const mapping = {
+  // Поля 1 в 1 как в DTO (camelCase)
+  const dtoKeys = {
     date: 'date',
     start: 'start',
     detect: 'detect',
     end: 'end',
     address: 'address',
     number: 'number',
-    phoneNumber: 'phone_number',
+    phoneNumber: 'phoneNumber',
     mail: 'mail',
     surname: 'surname',
     happened: 'happened',
-    happenedCause: 'happened_cause',
-    rootCause: 'root_cause',
-    affectedComponents: 'affected_components',
-    identifiedVulnerabilities: 'identified_vulnerabilities',
-    businessImpact: 'business_impact',
-    isEventResolved: 'is_event_resolved',
+    happenedCause: 'happenedCause',
+    rootCause: 'rootCause',
+    affectedComponents: 'affectedComponents',
+    identifiedVulnerabilities: 'identifiedVulnerabilities',
+    businessImpact: 'businessImpact',
+    isEventResolved: 'isEventResolved',
   };
 
-  Object.entries(mapping).forEach(([jsKey, dbKey]) => {
+  Object.entries(dtoKeys).forEach(([jsKey, dtoKey]) => {
     const el = fields[jsKey];
     if (!el) return;
 
     let newValue;
 
+    // Boolean (select)
     if (jsKey === 'isEventResolved') {
       const select = el.querySelector('select');
       if (select) newValue = select.value === 'true';
-    } else if (el.contentEditable === 'true') {
+    }
+
+    // Обычные текстовые поля
+    else if (el.contentEditable === 'true') {
       const trimmed = el.textContent.trim();
       const old =
         currentEvent[jsKey] !== null && currentEvent[jsKey] !== undefined
           ? String(currentEvent[jsKey]).trim()
           : '';
+
       if (trimmed !== old) {
         newValue = trimmed === '' ? null : trimmed;
       }
     }
 
-    if (newValue !== undefined) data[dbKey] = newValue;
+    // Записываем только изменившиеся
+    if (newValue !== undefined) {
+      data[dtoKey] = newValue; // <-- camelCase
+    }
   });
 
   console.log(
@@ -200,6 +209,7 @@ function collectFormData() {
     'background:#ff0;color:#000;font-weight:bold',
     data,
   );
+
   return data;
 }
 
@@ -223,9 +233,9 @@ async function saveChanges() {
 
     if (res.ok) {
       alert('Событие успешно обновлено!');
-      const fresh = await (await authFetch(`${API_URL}/${id}`)).json();
-      currentEvent = fresh.data;
-      renderEvent(currentEvent);
+      // const fresh = await (await authFetch(`${API_URL}/${id}`)).json();
+      // currentEvent = fresh.data;
+      // renderEvent(currentEvent);
       exitEditMode();
     } else {
       const err = await res.json().catch(() => ({}));
@@ -299,9 +309,9 @@ async function getEvent(id) {
     if (!res.ok) throw new Error('Не удалось загрузить событие');
 
     const json = await res.json();
-    if (!json.success || !json.data) throw new Error('Событие не найдено');
 
-    renderEvent(json.data);
+    // сервер возвращает сам объект события, без success/data
+    renderEvent(json);
   } catch (e) {
     console.error(e);
     document.body.innerHTML = `<h2 style="color:red;text-align:center;">${e.message}</h2>`;

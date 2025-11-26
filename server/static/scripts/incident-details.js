@@ -104,44 +104,32 @@ const ENUMS = {
     'мошенничество',
     'неправильное использование ресурсов',
     'саботаж',
-    'иное намеренное',
-    'отказ аппаратуры',
-    'отказ ПО',
-    'другие природные события',
-    'отказ системы связи',
-    'потеря значимых сервисов',
+    'иное_намеренное',
+    'отказ_аппаратуры',
+    'отказ_ПО',
+    'другие_природные_события',
+    'отказ_системы_связи',
+    'потеря_значимых_сервисов',
     'пожар',
-    'недостаточное кадровое обеспечение',
-    'другие случайные случаи',
-    'операционная ошибка',
-    'ошибка пользователя',
-    'ошибка в эксплуатации аппаратных средств',
-    'ошибка проектирования',
-    'ошибка в эксплуатации',
-    'другие случаи ошибок',
+    'недостаточное_кадровое_обеспечение',
+    'другие_случайные_случаи',
+    'операционная_ошибка',
+    'ошибка_пользователя',
+    'ошибка_в_эксплуатации_аппаратных_средств',
+    'ошибка_проектирования',
+    'ошибка_в_эксплуатации',
+    'другие_случаи_ошибок',
   ],
   negativeImpact: [
-    'нарушение конфиденциальности',
-    'нарушение целостности',
-    'нарушение доступности',
-    'нарушение неотказуемости',
+    'нарушение_конфиденциальности',
+    'нарушение_целостности',
+    'нарушение_доступности',
+    'нарушение_неотказуемости',
     'уничтожение',
-    'значимость указатели',
+    'значимость_указатели',
   ],
-  violatorType: [
-    'PE Лицо',
-    'OI Организация/учреждение',
-    'GR Организованная группа',
-    'AC Случайность',
-    'NP Отсутствие нарушителя',
-  ],
-  violatorMotivation: [
-    'CG Криминальная/финансовая выгода',
-    'PH Развлечение/хакерство',
-    'PT Политика/терроризм',
-    'RE Месть',
-    'OM Другие мотивы',
-  ],
+  violatorType: ['PE', 'OI', 'GR', 'AC', 'NP'],
+  violatorMotivation: ['CG', 'PH', 'PT', 'RE', 'OM'],
 };
 
 // ──────────────────────────────────────────────────────────────
@@ -151,7 +139,7 @@ async function authFetch(url, options = {}) {
   const token = localStorage.getItem('token');
   if (!token) {
     alert('Вы не авторизованы! Перенаправляю на вход...');
-    window.location.href = '/form';
+    window.location.href = '/login';
     return null;
   }
   const headers = {
@@ -167,7 +155,7 @@ async function authFetch(url, options = {}) {
   if (response.status === 401) {
     alert('Сессия истекла. Войдите заново.');
     localStorage.removeItem('token');
-    window.location.href = '/form';
+    window.location.href = '/login';
     return null;
   }
   return response;
@@ -185,8 +173,15 @@ function createAdminControls() {
 
   editBtn = btn('Редактировать', enterEditMode, '#007bff');
   deleteBtn = btn('Удалить инцидент', confirmDelete, '#dc3545');
+  similarBtn = btn(
+    'Похожие',
+    () => {
+      window.location.href = `/incident-table/${incidentType.textContent}`;
+    },
+    '#17a2b8',
+  );
 
-  controls.append(editBtn, deleteBtn);
+  controls.append(editBtn, deleteBtn, similarBtn);
   document.querySelector('h1').after(controls);
 }
 
@@ -278,57 +273,20 @@ function makeFieldsEditable() {
 // ──────────────────────────────────────────────────────────────
 function collectFormData() {
   const data = {};
-  const mapping = {
-    incidentNumber: 'incident_number',
-    incidentDate: 'incident_date',
-    operationSurname: 'operation_surname',
-    operationAddress: 'operation_address',
-    operationPhone: 'operation_phone',
-    operationEmail: 'operation_email',
-    griibSurname: 'griib_surname',
-    griibAddress: 'griib_address',
-    griibPhone: 'griib_phone',
-    griibEmail: 'griib_email',
-    whatHappened: 'what_happened',
-    howHappened: 'how_happened',
-    whyHappened: 'why_happened',
-    affectedComponents: 'affected_components',
-    businessImpact: 'business_impact',
-    identifiedVulnerabilities: 'identified_vulnerabilities',
-    startDateTime: 'start_datetime',
-    detectDateTime: 'detect_datetime',
-    reportDateTime: 'report_datetime',
-    incidentType: 'incident_type',
-    information: 'information',
-    hardware: 'hardware',
-    software: 'software',
-    communicationMeans: 'communication_means',
-    documentation: 'documentation',
-    negativeImpact: 'negative_impact',
-    isIncidentResolved: 'is_incident_resolved',
-    investigationStartDate: 'investigation_start_date',
-    investigators: 'investigators',
-    incidentEndDate: 'incident_end_date',
-    impactEndDate: 'impact_end_date',
-    investigationEndDate: 'investigation_end_date',
-    investigationReportLocation: 'investigation_report_location',
-    violatorType: 'violator_type',
-    violatorDescription: 'violator_description',
-    violatorMotivation: 'violator_motivation',
-    resolutionActions: 'resolution_actions',
-    plannedResolutionActions: 'planned_resolution_actions',
-    otherActions: 'other_actions',
-  };
 
-  Object.entries(mapping).forEach(([jsKey, dbKey]) => {
+  Object.keys(fields).forEach((jsKey) => {
     const el = fields[jsKey];
     if (!el) return;
 
     let newValue;
+
+    // select (булевое)
     if (jsKey === 'isIncidentResolved') {
       const select = el.querySelector('select');
       newValue = select ? select.value === 'true' : currentIncident[jsKey];
-    } else if (
+    }
+    // select (enum)
+    else if (
       [
         'incidentType',
         'negativeImpact',
@@ -338,16 +296,22 @@ function collectFormData() {
     ) {
       const select = el.querySelector('select');
       newValue = select ? select.value : currentIncident[jsKey];
-    } else if (el.contentEditable === 'true') {
+    }
+    // обычные редактируемые поля
+    else if (el.contentEditable === 'true') {
       const trimmed = el.textContent.trim();
       const old =
         currentIncident[jsKey] != null
           ? String(currentIncident[jsKey]).trim()
           : '';
+
       if (trimmed !== old) newValue = trimmed === '' ? null : trimmed;
     }
 
-    if (newValue !== undefined) data[dbKey] = newValue;
+    // записываем только те поля, которые действительно изменились
+    if (newValue !== undefined) {
+      data[jsKey] = newValue; // <-- CAMELCASE КАК В DTO
+    }
   });
 
   return data;
@@ -372,9 +336,9 @@ async function saveChanges() {
     if (!res) return;
     if (res.ok) {
       alert('Инцидент успешно обновлён!');
-      const fresh = await (await authFetch(`${API_URL}/${id}`)).json();
-      currentIncident = fresh.data;
-      renderIncident(currentIncident);
+      // const fresh = await (await authFetch(`${API_URL}/${id}`)).json();
+      // currentIncident = fresh.data;
+      // renderIncident(currentIncident);
       exitEditMode();
     } else {
       const err = await res.json().catch(() => ({}));
@@ -432,9 +396,11 @@ async function getIncident(id) {
   try {
     const res = await authFetch(`${API_URL}/${id}`);
     if (!res || !res.ok) throw new Error('Не удалось загрузить инцидент');
+
     const json = await res.json();
-    if (!json.success || !json.data) throw new Error('Инцидент не найден');
-    renderIncident(json.data);
+
+    // Сервер возвращает сразу объект инцидента
+    renderIncident(json);
   } catch (e) {
     console.error(e);
     document.body.innerHTML = `<h2 style="color:red;text-align:center;">${e.message}</h2>`;

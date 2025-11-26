@@ -1,6 +1,7 @@
 // incident-table.js — исправленная версия
 const API_URL = '/api/incidents';
 const LIMIT = 10;
+const type = window.location.pathname.split('/').filter(Boolean)[1];
 let currentSkip = 0;
 let total = 0;
 
@@ -20,7 +21,7 @@ async function authFetch(url) {
   const token = localStorage.getItem('token');
   if (!token) {
     alert('Вы не авторизованы!');
-    window.location.href = '/auth/login';
+    window.location.href = '/login';
     return null;
   }
 
@@ -35,7 +36,7 @@ async function authFetch(url) {
   if (response.status === 401) {
     alert('Сессия истекла. Войдите заново.');
     localStorage.removeItem('token');
-    window.location.href = '/auth/login';
+    window.location.href = '/login';
     return null;
   }
 
@@ -44,25 +45,21 @@ async function authFetch(url) {
 
 async function loadIncidents(skip = 0) {
   try {
-    const response = await authFetch(`${API_URL}?skip=${skip}&take=${LIMIT}`);
+    const byType = type === 'none' ? '' : `&type=${type}`;
+
+    const response = await authFetch(
+      `${API_URL}?skip=${skip}&take=${LIMIT}${byType}`,
+    );
     if (!response) return;
 
     const result = await response.json();
 
-    if (!result.success || !result.data) {
-      tableBody.innerHTML =
-        '<tr><td colspan="10">Ошибка загрузки данных</td></tr>';
-      return;
-    }
-
-    const {
-      data: incidents,
-      total: totalCount,
-      skip: returnedSkip,
-    } = result.data;
-
+    // Проблемная проверка убрана
+    const incidentsData = result.data || result; // если backend возвращает {data: [...]} или сразу массив
+    const incidents = incidentsData.data || incidentsData;
+    const totalCount = incidentsData.total || incidents.length;
+    currentSkip = incidentsData.skip || 0;
     total = totalCount;
-    currentSkip = returnedSkip;
 
     tableBody.innerHTML = '';
 
