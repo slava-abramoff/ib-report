@@ -39,7 +39,7 @@ async function authFetch(url, options = {}) {
   const token = localStorage.getItem('token');
   if (!token) {
     alert('Вы не авторизованы! Перенаправляю на вход...');
-    window.location.href = '/form';
+    window.location.href = '/login';
     return null;
   }
 

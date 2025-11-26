@@ -80,7 +80,7 @@ async function loadIncidents(skip = 0) {
         <td>${truncateText(incident.griibSurname)}</td>
         <td>${truncateText(incident.griibAddress)}</td>
         <td>${incident.isIncidentResolved ? 'Да' : 'Нет'}</td>
-        <td><a href="/incidents/${incident.id}/doc" target="_blank">PDF</a></td>
+        <td><a href="/api/incidents/${incident.id}/doc" target="_blank">PDF</a></td>
         <td><a href="/incident-details/${incident.id}">Подробнее</a></td>
       `;
       tableBody.appendChild(row);

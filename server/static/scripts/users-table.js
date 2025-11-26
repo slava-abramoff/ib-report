@@ -18,7 +18,7 @@ async function loadUsers(skip = 0) {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/auth/login';
+      window.location.href = '/login';
       return;
     }
 
@@ -33,7 +33,7 @@ async function loadUsers(skip = 0) {
     if (response.status === 401) {
       alert('Сессия истекла. Пожалуйста, войдите заново.');
       localStorage.removeItem('token');
-      window.location.href = '/auth/login';
+      window.location.href = '/login';
       return;
     }
 

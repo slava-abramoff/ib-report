@@ -14,7 +14,7 @@ async function apiFetch(url, options = {}) {
 
   // Если токена нет — сразу на логин
   if (!token) {
-    window.location.href = '/auth/login';
+    window.location.href = '/login';
     return;
   }
 
@@ -41,7 +41,7 @@ async function loadEvents(skip = 0) {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
       localStorage.removeItem('login');
-      window.location.href = '/login.html';
+      window.location.href = '/login';
       return;
     }
 
@@ -70,7 +70,7 @@ async function loadEvents(skip = 0) {
                 <td>${truncateText(event.surname)}</td>
                 <td>${truncateText(event.address)}</td>
                 <td>${event.isEventResolved ? 'Да' : 'Нет'}</td>
-                <td><a href="/events/${event.id}/doc" target="_blank">PDF</a></td>
+                <td><a href="/api/events/${event.id}/doc" target="_blank">PDF</a></td>
                 <td><a href="/event-details/${event.id}"> Подробнее</a></td>
             `;
       tableBody.appendChild(row);
