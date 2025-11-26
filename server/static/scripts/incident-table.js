@@ -1,42 +1,41 @@
 // incident-table.js — исправленная версия
-const API_URL = "/incidents";
+const API_URL = '/api/incidents';
 const LIMIT = 10;
 let currentSkip = 0;
 let total = 0;
 
-const tableBody = document.getElementById("incidentsBody");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const pageInfo = document.getElementById("pageInfo");
+const tableBody = document.getElementById('incidentsBody');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const pageInfo = document.getElementById('pageInfo');
 
 function truncateText(text, maxLength = 50) {
-  if (!text) return "";
+  if (!text) return '';
   const str = String(text);
-  return str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
+  return str.length > maxLength ? str.slice(0, maxLength) + '...' : str;
 }
 
 // ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ — добавляет токен в запрос
 async function authFetch(url) {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (!token) {
-    alert("Вы не авторизованы!");
-    window.location.href = "/form";
+    alert('Вы не авторизованы!');
+    window.location.href = '/auth/login';
     return null;
   }
 
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include", // на всякий случай, если используешь куки
+    credentials: 'include',
   });
 
-  // Если сервер вернул 401 — редиректим на логин
   if (response.status === 401) {
-    alert("Сессия истекла. Войдите заново.");
-    localStorage.removeItem("token");
-    window.location.href = "/form";
+    alert('Сессия истекла. Войдите заново.');
+    localStorage.removeItem('token');
+    window.location.href = '/auth/login';
     return null;
   }
 
@@ -45,7 +44,7 @@ async function authFetch(url) {
 
 async function loadIncidents(skip = 0) {
   try {
-    const response = await authFetch(`${API_URL}?skip=${skip}&limit=${LIMIT}`);
+    const response = await authFetch(`${API_URL}?skip=${skip}&take=${LIMIT}`);
     if (!response) return;
 
     const result = await response.json();
@@ -65,7 +64,7 @@ async function loadIncidents(skip = 0) {
     total = totalCount;
     currentSkip = returnedSkip;
 
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = '';
 
     if (incidents.length === 0) {
       tableBody.innerHTML = '<tr><td colspan="10">Нет данных</td></tr>';
@@ -74,16 +73,16 @@ async function loadIncidents(skip = 0) {
     }
 
     incidents.forEach((incident) => {
-      const row = document.createElement("tr");
+      const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${incident.id || ""}</td>
+        <td>${incident.id || ''}</td>
         <td>${truncateText(incident.incidentDate)}</td>
         <td>${truncateText(incident.incidentNumber)}</td>
         <td>${truncateText(incident.operationSurname)}</td>
         <td>${truncateText(incident.operationAddress)}</td>
         <td>${truncateText(incident.griibSurname)}</td>
         <td>${truncateText(incident.griibAddress)}</td>
-        <td>${incident.isIncidentResolved ? "Да" : "Нет"}</td>
+        <td>${incident.isIncidentResolved ? 'Да' : 'Нет'}</td>
         <td><a href="/incidents/${incident.id}/doc" target="_blank">PDF</a></td>
         <td><a href="/incident-details/${incident.id}">Подробнее</a></td>
       `;
@@ -92,7 +91,7 @@ async function loadIncidents(skip = 0) {
 
     updatePagination();
   } catch (err) {
-    console.error("Ошибка:", err);
+    console.error('Ошибка:', err);
     tableBody.innerHTML = '<tr><td colspan="10">Ошибка сети</td></tr>';
   }
 }
@@ -105,11 +104,11 @@ function updatePagination() {
   nextBtn.disabled = currentSkip + LIMIT >= total;
 }
 
-prevBtn.addEventListener("click", () => {
+prevBtn.addEventListener('click', () => {
   if (currentSkip >= LIMIT) loadIncidents(currentSkip - LIMIT);
 });
 
-nextBtn.addEventListener("click", () => {
+nextBtn.addEventListener('click', () => {
   if (currentSkip + LIMIT < total) loadIncidents(currentSkip + LIMIT);
 });
 

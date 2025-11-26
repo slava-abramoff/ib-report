@@ -1,32 +1,32 @@
 // /scripts/event-details.js
-const API_URL = "/events";
+const API_URL = '/api/events';
 const path = window.location.pathname;
-const id = path.split("/").pop();
+const id = path.split('/').pop();
 
 // DOM-элементы
-const eventNumberTitle = document.getElementById("event-id");
-const title = document.querySelector("h1");
+const eventNumberTitle = document.getElementById('event-id');
+const title = document.querySelector('h1');
 const fields = {
-  id: document.getElementById("id"),
-  date: document.getElementById("date"),
-  start: document.getElementById("start"),
-  detect: document.getElementById("detect"),
-  end: document.getElementById("end"),
-  eventDuration: document.getElementById("eventDuration"),
-  address: document.getElementById("address"),
-  number: document.getElementById("number"),
-  phoneNumber: document.getElementById("phoneNumber"),
-  mail: document.getElementById("mail"),
-  surname: document.getElementById("surname"),
-  happened: document.getElementById("happened"),
-  happenedCause: document.getElementById("happenedCause"),
-  rootCause: document.getElementById("rootCause"),
-  affectedComponents: document.getElementById("affectedComponents"),
+  id: document.getElementById('id'),
+  date: document.getElementById('date'),
+  start: document.getElementById('start'),
+  detect: document.getElementById('detect'),
+  end: document.getElementById('end'),
+  eventDuration: document.getElementById('eventDuration'),
+  address: document.getElementById('address'),
+  number: document.getElementById('number'),
+  phoneNumber: document.getElementById('phoneNumber'),
+  mail: document.getElementById('mail'),
+  surname: document.getElementById('surname'),
+  happened: document.getElementById('happened'),
+  happenedCause: document.getElementById('happenedCause'),
+  rootCause: document.getElementById('rootCause'),
+  affectedComponents: document.getElementById('affectedComponents'),
   identifiedVulnerabilities: document.getElementById(
-    "identifiedVulnerabilities",
+    'identifiedVulnerabilities',
   ),
-  businessImpact: document.getElementById("businessImpact"),
-  isEventResolved: document.getElementById("isEventResolved"),
+  businessImpact: document.getElementById('businessImpact'),
+  isEventResolved: document.getElementById('isEventResolved'),
 };
 
 // Кнопки
@@ -36,29 +36,29 @@ let isEditMode = false;
 
 // Универсальный authFetch (без Content-Type, если нет body)
 async function authFetch(url, options = {}) {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (!token) {
-    alert("Вы не авторизованы! Перенаправляю на вход...");
-    window.location.href = "/form";
+    alert('Вы не авторизованы! Перенаправляю на вход...');
+    window.location.href = '/form';
     return null;
   }
 
   const headers = {
     Authorization: `Bearer ${token}`,
-    ...(options.body ? { "Content-Type": "application/json" } : {}),
+    ...(options.body ? { 'Content-Type': 'application/json' } : {}),
     ...options.headers,
   };
 
   const response = await fetch(url, {
     ...options,
     headers,
-    credentials: "include",
+    credentials: 'include',
   });
 
   if (response.status === 401) {
-    alert("Сессия истекла. Войдите заново.");
-    localStorage.removeItem("token");
-    window.location.href = "/form";
+    alert('Сессия истекла. Войдите заново.');
+    localStorage.removeItem('token');
+    window.location.href = '/form';
     return null;
   }
   return response;
@@ -66,34 +66,34 @@ async function authFetch(url, options = {}) {
 
 // Панель управления для админа
 function createAdminControls() {
-  if (localStorage.getItem("role") !== "admin") return;
+  if (localStorage.getItem('role') !== 'admin') return;
 
-  const controls = document.createElement("div");
-  controls.className = "admin-controls";
+  const controls = document.createElement('div');
+  controls.className = 'admin-controls';
   controls.style.cssText = `
     margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px;
     display: flex; gap: 12px; flex-wrap: wrap; align-items: center; font-size: 15px;
   `;
 
-  editBtn = btn("Редактировать", () => enterEditMode(), "#007bff");
-  deleteBtn = btn("Удалить событие", () => confirmDelete(), "#dc3545");
-  similarBtn = btn("Похожие", () => alert("Функция в разработке"), "#17a2b8");
+  editBtn = btn('Редактировать', () => enterEditMode(), '#007bff');
+  deleteBtn = btn('Удалить событие', () => confirmDelete(), '#dc3545');
+  similarBtn = btn('Похожие', () => alert('Функция в разработке'), '#17a2b8');
 
   controls.append(editBtn, similarBtn, deleteBtn);
   title.after(controls);
 }
 
 function btn(text, click, bg) {
-  const b = document.createElement("button");
+  const b = document.createElement('button');
   b.textContent = text;
-  b.type = "button";
+  b.type = 'button';
   b.onclick = click;
   b.style.cssText = `
     padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer;
     color: white; background: ${bg}; font-weight: 500; transition: opacity .2s;
   `;
-  b.onmouseover = () => (b.style.opacity = "0.9");
-  b.onmouseout = () => (b.style.opacity = "1");
+  b.onmouseover = () => (b.style.opacity = '0.9');
+  b.onmouseout = () => (b.style.opacity = '1');
   return b;
 }
 
@@ -105,10 +105,10 @@ function enterEditMode() {
   );
   makeFieldsEditable();
 
-  const controls = document.querySelector(".admin-controls");
-  controls.innerHTML = "";
-  saveBtn = btn("Сохранить", () => saveChanges(), "#28a745");
-  cancelBtn = btn("Отмена", () => exitEditMode(), "#6c757d");
+  const controls = document.querySelector('.admin-controls');
+  controls.innerHTML = '';
+  saveBtn = btn('Сохранить', () => saveChanges(), '#28a745');
+  cancelBtn = btn('Отмена', () => exitEditMode(), '#6c757d');
   controls.append(saveBtn, cancelBtn);
 }
 
@@ -119,58 +119,57 @@ function exitEditMode() {
     const el = fields[k];
     el.textContent = el.dataset.original || el.textContent;
     el.contentEditable = false;
-    el.style.cssText = "";
+    el.style.cssText = '';
     if (el.querySelector) el.innerHTML = el.dataset.original || el.innerHTML;
   });
 
-  const controls = document.querySelector(".admin-controls");
-  controls.innerHTML = "";
+  const controls = document.querySelector('.admin-controls');
+  controls.innerHTML = '';
   controls.append(editBtn, similarBtn, deleteBtn);
 }
 
 // Делаем поля редактируемыми
 function makeFieldsEditable() {
-  const nonEditable = ["id", "eventDuration"];
+  const nonEditable = ['id', 'eventDuration'];
   Object.keys(fields).forEach((key) => {
     const el = fields[key];
     if (nonEditable.includes(key)) return;
 
-    if (key === "isEventResolved") {
-      const select = document.createElement("select");
+    if (key === 'isEventResolved') {
+      const select = document.createElement('select');
       select.innerHTML = `<option value="false">Нет</option><option value="true">Да</option>`;
-      select.value = currentEvent.isEventResolved ? "true" : "false";
-      el.textContent = "";
+      select.value = currentEvent.isEventResolved ? 'true' : 'false';
+      el.textContent = '';
       el.appendChild(select);
       return;
     }
 
     el.contentEditable = true;
     el.style.cssText =
-      "background:#fff; padding:4px 6px; border:1px solid #007bff; border-radius:4px;";
+      'background:#fff; padding:4px 6px; border:1px solid #007bff; border-radius:4px;';
   });
 }
-
 
 function collectFormData() {
   const data = {};
 
   const mapping = {
-    date: "date",
-    start: "start",
-    detect: "detect",
-    end: "end",
-    address: "address",
-    number: "number",
-    phoneNumber: "phone_number",
-    mail: "mail",
-    surname: "surname",
-    happened: "happened",
-    happenedCause: "happened_cause",
-    rootCause: "root_cause",
-    affectedComponents: "affected_components",
-    identifiedVulnerabilities: "identified_vulnerabilities",
-    businessImpact: "business_impact",
-    isEventResolved: "is_event_resolved",
+    date: 'date',
+    start: 'start',
+    detect: 'detect',
+    end: 'end',
+    address: 'address',
+    number: 'number',
+    phoneNumber: 'phone_number',
+    mail: 'mail',
+    surname: 'surname',
+    happened: 'happened',
+    happenedCause: 'happened_cause',
+    rootCause: 'root_cause',
+    affectedComponents: 'affected_components',
+    identifiedVulnerabilities: 'identified_vulnerabilities',
+    businessImpact: 'business_impact',
+    isEventResolved: 'is_event_resolved',
   };
 
   Object.entries(mapping).forEach(([jsKey, dbKey]) => {
@@ -179,17 +178,17 @@ function collectFormData() {
 
     let newValue;
 
-    if (jsKey === "isEventResolved") {
-      const select = el.querySelector("select");
-      if (select) newValue = select.value === "true";
-    } else if (el.contentEditable === "true") {
+    if (jsKey === 'isEventResolved') {
+      const select = el.querySelector('select');
+      if (select) newValue = select.value === 'true';
+    } else if (el.contentEditable === 'true') {
       const trimmed = el.textContent.trim();
       const old =
         currentEvent[jsKey] !== null && currentEvent[jsKey] !== undefined
           ? String(currentEvent[jsKey]).trim()
-          : "";
+          : '';
       if (trimmed !== old) {
-        newValue = trimmed === "" ? null : trimmed;
+        newValue = trimmed === '' ? null : trimmed;
       }
     }
 
@@ -197,8 +196,8 @@ function collectFormData() {
   });
 
   console.log(
-    "%cОтправка на сервер:",
-    "background:#ff0;color:#000;font-weight:bold",
+    '%cОтправка на сервер:',
+    'background:#ff0;color:#000;font-weight:bold',
     data,
   );
   return data;
@@ -209,57 +208,57 @@ async function saveChanges() {
   const payload = collectFormData();
 
   if (Object.keys(payload).length === 0) {
-    alert("Ничего не изменилось");
+    alert('Ничего не изменилось');
     exitEditMode();
     return;
   }
 
   try {
     const res = await authFetch(`${API_URL}/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(payload),
     });
 
     if (!res) return;
 
     if (res.ok) {
-      alert("Событие успешно обновлено!");
+      alert('Событие успешно обновлено!');
       const fresh = await (await authFetch(`${API_URL}/${id}`)).json();
       currentEvent = fresh.data;
       renderEvent(currentEvent);
       exitEditMode();
     } else {
       const err = await res.json().catch(() => ({}));
-      alert("Ошибка: " + (err.error || err.message || "Неизвестная ошибка"));
+      alert('Ошибка: ' + (err.error || err.message || 'Неизвестная ошибка'));
     }
   } catch (e) {
     console.error(e);
-    alert("Ошибка сети");
+    alert('Ошибка сети');
   }
 }
 
 // Удаление
 async function confirmDelete() {
-  if (!confirm("Удалить событие навсегда? Это действие нельзя отменить."))
+  if (!confirm('Удалить событие навсегда? Это действие нельзя отменить.'))
     return;
 
   try {
-    const res = await authFetch(`${API_URL}/${id}`, { method: "DELETE" });
+    const res = await authFetch(`${API_URL}/${id}`, { method: 'DELETE' });
     if (!res) return;
 
     if (res.ok) {
-      alert("Событие удалено");
-      window.location.href = "/event-table";
+      alert('Событие удалено');
+      window.location.href = '/event-table';
     } else {
       const err = await res.json().catch(() => ({}));
       alert(
-        "Ошибка удаления: " +
-          (err.error || err.message || "Неизвестная ошибка"),
+        'Ошибка удаления: ' +
+          (err.error || err.message || 'Неизвестная ошибка'),
       );
     }
   } catch (e) {
     console.error(e);
-    alert("Ошибка при удалении");
+    alert('Ошибка при удалении');
   }
 }
 
@@ -272,18 +271,18 @@ function renderEvent(event) {
 
   currentEvent = event;
 
-  eventNumberTitle.textContent = event.number || "—";
+  eventNumberTitle.textContent = event.number || '—';
   Object.entries(fields).forEach(([key, el]) => {
-    if (key === "isEventResolved") {
-      el.textContent = event.isEventResolved ? "Да" : "Нет";
+    if (key === 'isEventResolved') {
+      el.textContent = event.isEventResolved ? 'Да' : 'Нет';
     } else {
-      el.textContent = event[key] ?? "—";
+      el.textContent = event[key] ?? '—';
     }
     el.contentEditable = false;
-    el.style.cssText = "";
+    el.style.cssText = '';
   });
 
-  document.querySelector(".admin-controls")?.remove();
+  document.querySelector('.admin-controls')?.remove();
   createAdminControls();
 }
 
@@ -297,10 +296,10 @@ async function getEvent(id) {
   try {
     const res = await authFetch(`${API_URL}/${id}`);
     if (!res) return;
-    if (!res.ok) throw new Error("Не удалось загрузить событие");
+    if (!res.ok) throw new Error('Не удалось загрузить событие');
 
     const json = await res.json();
-    if (!json.success || !json.data) throw new Error("Событие не найдено");
+    if (!json.success || !json.data) throw new Error('Событие не найдено');
 
     renderEvent(json.data);
   } catch (e) {

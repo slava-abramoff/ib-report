@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { IncidentsService } from './incidents.service';
 import {
@@ -41,7 +41,7 @@ export class IncidentsController {
     return this.incidentsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateIncidentDto: CreateIncidentDto,

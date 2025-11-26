@@ -103,7 +103,7 @@ model Incident {
   id Int @id @default(autoincrement())
 
   // Основные данные
-  incidentDate   DateTime?
+  incidentDate   String?
   incidentNumber String?
 
   // Сотрудник группы обеспечения эксплуатации
@@ -127,9 +127,9 @@ model Incident {
   identifiedVulnerabilities String?
 
   // Временные метки
-  startDateTime  DateTime?
-  detectDateTime DateTime?
-  reportDateTime DateTime?
+  startDateTime  String?
+  detectDateTime String?
+  reportDateTime String?
 
   // Статус
   isIncidentResolved Boolean?
@@ -148,11 +148,11 @@ model Incident {
   negativeImpact NegativeImpact?
 
   // ─────── Разрешение инцидента ───────
-  investigationStartDate      DateTime?
+  investigationStartDate      String?
   investigators               String?
-  incidentEndDate             DateTime?
-  impactEndDate               DateTime?
-  investigationEndDate        DateTime?
+  incidentEndDate             String?
+  impactEndDate               String?
+  investigationEndDate        String?
   investigationReportLocation String?
 
   // Причастные лица / нарушители

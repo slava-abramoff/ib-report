@@ -18,7 +18,7 @@ import { StaticPagesController } from './static-pages/static-pages.controller';
     IncidentsModule,
     StaticPagesModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'static'),
+      rootPath: join(process.cwd(), 'static'),
       serveRoot: '/static',
     }),
   ],

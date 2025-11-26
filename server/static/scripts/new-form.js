@@ -1,15 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const isIncidentSelect = document.getElementById("isIncident");
-  const sendBtn = document.getElementById("sendBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const prevBtn = document.getElementById("prevBtn");
+document.addEventListener('DOMContentLoaded', () => {
+  const isIncidentSelect = document.getElementById('isIncident');
+  const sendBtn = document.getElementById('sendBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const prevBtn = document.getElementById('prevBtn');
 
   const sections = [
-    document.getElementById("eventForm"),
-    document.getElementById("incidentForm"),
-    document.getElementById("incidentFormType"),
-    document.getElementById("incidentFormAddInfo"),
-    document.getElementById("incidentFormResolution"),
+    document.getElementById('eventForm'),
+    document.getElementById('incidentForm'),
+    document.getElementById('incidentFormType'),
+    document.getElementById('incidentFormAddInfo'),
+    document.getElementById('incidentFormResolution'),
   ];
 
   let currentSectionIndex = 0;
@@ -17,22 +17,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===
   async function authFetch(url, options = {}) {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      alert("Вы не авторизованы!");
-      window.location.href = "/login.html";
+      alert('Вы не авторизованы!');
+      window.location.href = '/login.html';
       return null;
     }
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
       ...options.headers,
     };
     const response = await fetch(url, { ...options, headers });
     if (response.status === 401) {
       localStorage.clear();
-      alert("Сессия истекла. Войдите заново.");
-      window.location.href = "/login.html";
+      alert('Сессия истекла. Войдите заново.');
+      window.location.href = '/auth/login';
       return null;
     }
     return response;
@@ -44,14 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!section) return true;
 
     const inputs = section.querySelectorAll(
-      "input[required], select[required], textarea[required]",
+      'input[required], select[required], textarea[required]',
     );
     return Array.from(inputs).every((input) => {
-      if (input.type === "radio" || input.type === "checkbox") {
-        const name = input.getAttribute("name");
+      if (input.type === 'radio' || input.type === 'checkbox') {
+        const name = input.getAttribute('name');
         return document.querySelector(`input[name="${name}"]:checked`) !== null;
       }
-      return input.value.trim() !== "" && input.checkValidity();
+      return input.value.trim() !== '' && input.checkValidity();
     });
   }
 
@@ -62,20 +62,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nextBtn.disabled =
       !isSectionValid(currentSectionIndex) || !canGoNext || isLast;
-    prevBtn.classList.toggle("hidden", currentSectionIndex === 0);
+    prevBtn.classList.toggle('hidden', currentSectionIndex === 0);
 
     // Показываем "Отправить" только когда:
     // - Это событие без инцидента (только первый шаг)
     // - Или это инцидент и мы на последнем шаге
     const showSend =
       (!isIncident && currentSectionIndex === 0) || (isIncident && isLast);
-    sendBtn.classList.toggle("hidden", !showSend);
+    sendBtn.classList.toggle('hidden', !showSend);
     sendBtn.disabled = !isSectionValid(currentSectionIndex);
   }
 
   function updateSections() {
     sections.forEach((sec, i) => {
-      sec.classList.toggle("hidden", i !== currentSectionIndex);
+      sec.classList.toggle('hidden', i !== currentSectionIndex);
     });
     updateButtons();
   }
@@ -85,8 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!form) return {};
     const data = {};
     new FormData(form).forEach((value, key) => {
-      if (value === "да" || value === "true") data[key] = true;
-      else if (value === "нет" || value === "false") data[key] = false;
+      if (value === 'да' || value === 'true') data[key] = true;
+      else if (value === 'нет' || value === 'false') data[key] = false;
       else data[key] = value.trim();
     });
     return data;
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelectorAll('input[name="date"], input[name="incidentDate"]')
     .forEach((el) => {
-      el.type = "date";
+      el.type = 'date';
       el.required = true;
     });
 
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     input[name="impactEndDate"], input[name="investigationEndDate"]',
     )
     .forEach((el) => {
-      el.type = "datetime-local";
+      el.type = 'datetime-local';
       el.required = true;
     });
 
@@ -135,13 +135,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === СОБЫТИЯ ===
   isIncidentSelect.required = true;
-  isIncidentSelect.addEventListener("change", (e) => {
-    isIncident = e.target.value === "yes";
+  isIncidentSelect.addEventListener('change', (e) => {
+    isIncident = e.target.value === 'yes';
     currentSectionIndex = 0;
     updateSections();
   });
 
-  nextBtn.addEventListener("click", () => {
+  nextBtn.addEventListener('click', () => {
     if (
       isSectionValid(currentSectionIndex) &&
       currentSectionIndex < sections.length - 1
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  prevBtn.addEventListener("click", () => {
+  prevBtn.addEventListener('click', () => {
     if (currentSectionIndex > 0) {
       currentSectionIndex--;
       updateSections();
@@ -159,47 +159,47 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Отслеживаем изменения в полях
-  document.addEventListener("input", updateButtons);
-  document.addEventListener("change", updateButtons);
+  document.addEventListener('input', updateButtons);
+  document.addEventListener('change', updateButtons);
 
   // === ОТПРАВКА ===
-  sendBtn.addEventListener("click", async () => {
+  sendBtn.addEventListener('click', async () => {
     if (!isSectionValid(currentSectionIndex)) {
-      alert("Заполните все обязательные поля!");
+      alert('Заполните все обязательные поля!');
       return;
     }
 
     try {
-      const eventData = collectFormData("eventFormContent");
-      const eventRes = await authFetch("/events", {
-        method: "POST",
+      const eventData = collectFormData('eventFormContent');
+      const eventRes = await authFetch('/api/events', {
+        method: 'POST',
         body: JSON.stringify(eventData),
       });
-      if (!eventRes?.ok) throw new Error("Ошибка при создании события");
+      if (!eventRes?.ok) throw new Error('Ошибка при создании события');
 
       if (isIncident) {
         const incidentData = {
-          ...collectFormData("incidentFormContent"),
-          ...collectFormData("incidentFormTypeContent"),
-          ...collectFormData("incidentFormAddInfoContent"),
-          ...collectFormData("incidentFormResolutionContent"),
+          ...collectFormData('incidentFormContent'),
+          ...collectFormData('incidentFormTypeContent'),
+          ...collectFormData('incidentFormAddInfoContent'),
+          ...collectFormData('incidentFormResolutionContent'),
         };
-        const incRes = await authFetch("/incidents", {
-          method: "POST",
+        const incRes = await authFetch('/api/incidents', {
+          method: 'POST',
           body: JSON.stringify(incidentData),
         });
-        if (!incRes?.ok) throw new Error("Ошибка при создании инцидента");
+        if (!incRes?.ok) throw new Error('Ошибка при создании инцидента');
       }
 
-      alert("Отчёт успешно создан!");
-      document.querySelectorAll("form").forEach((f) => f.reset());
-      isIncidentSelect.value = "";
+      alert('Отчёт успешно создан!');
+      document.querySelectorAll('form').forEach((f) => f.reset());
+      isIncidentSelect.value = '';
       isIncident = false;
       currentSectionIndex = 0;
       updateSections();
     } catch (err) {
       console.error(err);
-      alert(err.message || "Ошибка отправки");
+      alert(err.message || 'Ошибка отправки');
     }
   });
 

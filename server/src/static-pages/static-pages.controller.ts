@@ -13,7 +13,7 @@ export class StaticPagesController {
     return this.send(res, 'login.html');
   }
 
-  @Get('events')
+  @Get('event-table')
   events(@Res() res: Response) {
     return this.send(res, 'event-table.html');
   }
@@ -23,7 +23,7 @@ export class StaticPagesController {
     return this.send(res, 'event-details.html');
   }
 
-  @Get('incidents')
+  @Get('incident-table')
   incidents(@Res() res: Response) {
     return this.send(res, 'incident-table.html');
   }
@@ -38,7 +38,7 @@ export class StaticPagesController {
     return this.send(res, 'form.html');
   }
 
-  @Get('users')
+  @Get('users-table')
   users(@Res() res: Response) {
     return this.send(res, 'users-table.html');
   }
