@@ -1,45 +1,45 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { StaticPagesService } from './static-pages.service';
-import { CreateStaticPageDto } from './dto/create-static-page.dto';
-import { UpdateStaticPageDto } from './dto/update-static-page.dto';
+import { Controller, Get, Res } from '@nestjs/common';
+import type { Response } from 'express';
+import { join } from 'path';
 
-@Controller('static-pages')
+@Controller('')
 export class StaticPagesController {
-  constructor(private readonly staticPagesService: StaticPagesService) {}
-
-  @Post()
-  create(@Body() createStaticPageDto: CreateStaticPageDto) {
-    return this.staticPagesService.create(createStaticPageDto);
+  private send(res: Response, file: string) {
+    return res.sendFile(join(__dirname, '..', '../../static', file));
   }
 
-  @Get()
-  findAll() {
-    return this.staticPagesService.findAll();
+  @Get('login')
+  login(@Res() res: Response) {
+    return this.send(res, 'login.html');
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.staticPagesService.findOne(+id);
+  @Get('events')
+  events(@Res() res: Response) {
+    return this.send(res, 'event-table.html');
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateStaticPageDto: UpdateStaticPageDto,
-  ) {
-    return this.staticPagesService.update(+id, updateStaticPageDto);
+  @Get('events/details')
+  eventsDetails(@Res() res: Response) {
+    return this.send(res, 'event-details.html');
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.staticPagesService.remove(+id);
+  @Get('incidents')
+  incidents(@Res() res: Response) {
+    return this.send(res, 'incident-table.html');
+  }
+
+  @Get('incidents/details')
+  incidentsDetails(@Res() res: Response) {
+    return this.send(res, 'incident-details.html');
+  }
+
+  @Get('form')
+  form(@Res() res: Response) {
+    return this.send(res, 'form.html');
+  }
+
+  @Get('users')
+  users(@Res() res: Response) {
+    return this.send(res, 'users-table.html');
   }
 }

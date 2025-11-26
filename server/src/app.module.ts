@@ -5,10 +5,23 @@ import { DocsModule } from './docs/docs.module';
 import { EventsModule } from './events/events.module';
 import { IncidentsModule } from './incidents/incidents.module';
 import { StaticPagesModule } from './static-pages/static-pages.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { StaticPagesController } from './static-pages/static-pages.controller';
 
 @Module({
-  imports: [UsersModule, AuthModule, DocsModule, EventsModule, IncidentsModule, StaticPagesModule],
-  controllers: [],
-  providers: [],
+  imports: [
+    UsersModule,
+    AuthModule,
+    DocsModule,
+    EventsModule,
+    IncidentsModule,
+    StaticPagesModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'static'),
+      serveRoot: '/static',
+    }),
+  ],
+  controllers: [StaticPagesController],
 })
 export class AppModule {}
