@@ -3,6 +3,14 @@
 ```bash
 $ cd server
 $ yarn install
+```
+### Creating .env
+```bash
+$ nano .env
+```
+
+### Push database
+```bash
 $ yarn prisma generate
 $ yarn prisma db push
 ```
