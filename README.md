@@ -1,7 +1,10 @@
 ## Project setup
 
 ```bash
+$ cd server
 $ yarn install
+$ yarn prisma generate
+$ yarn prisma db push
 ```
 
 ## Compile and run the project
